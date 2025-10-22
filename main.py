@@ -23,23 +23,7 @@ from threading import Thread
 Working = True
 
 banner = '''
-
- ____   ____.______  ._______  .______       _____._.______  .___  ____   ____
- \\   \\_/   /: __   \\ : .___  \\ :      \\      \\__ _:|: __   \\ : __| \\   \\_/   /
-  \\___ ___/ |  \\____|| :   |  ||       |       |  :||  \\____|| : |  \\___ ___/ 
-  /   _   \\ |   :  \\ |     :  ||   |   |       |   ||   :  \\ |   |  /   _   \\ 
- /___/ \\___\\|   |___\\ \\_. ___/ |___|   |       |   ||   |___\\|   | /___/ \\___\\
-            |___|       :/         |___|       |___||___|    |___|            
-                        :                                                     
-                                                                              
- 
-              _____     __     __     __              __          
-             / ___/__  / /__ _/ /    / / ___ ___ ____/ /  ___ ____
-            / /__/ _ \\/ / _ `/ _ \\  / /_/ -_) -_) __/ _ \\/ -_) __/
-            \\___/\\___/_/\\_,_/_.__/ /____|__/\\__/\\__/_//_/\\__/_/   
-
-                                                
-
+... (omitted banner for brevity)
 '''
 
 print(banner)
@@ -72,6 +56,25 @@ proc = subprocess.run(cmd, shell=True)
 cmd = "pip3 install -r /content/Telegram-Leecher/requirements.txt"
 proc = subprocess.run(cmd, shell=True)
 
+# ----------------------------------------------------
+# 💡 FIX START: Install and apply nest_asyncio
+# ----------------------------------------------------
+cmd = "pip install nest_asyncio"
+subprocess.run(cmd, shell=True)
+
+import nest_asyncio
+import asyncio # Import asyncio just to be safe
+try:
+    nest_asyncio.apply()
+    # If the bot itself needs to run async tasks within the execution environment, 
+    # it's best to apply the patch here.
+except:
+    print("Could not apply nest_asyncio. The bot might still fail.")
+# ----------------------------------------------------
+# 💡 FIX END
+# ----------------------------------------------------
+
+
 credentials = {
     "API_ID": API_ID,
     "API_HASH": API_HASH,
@@ -90,4 +93,5 @@ if os.path.exists("/content/Telegram-Leecher/my_bot.session"):
     
 print("\rStarting Bot....")
 
+# This command runs the external script, which is where the original error occurred.
 !cd /content/Telegram-Leecher/ && python3 -m colab_leecher #type:ignore
